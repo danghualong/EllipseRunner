@@ -13,9 +13,9 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-            <Label Content="当前角度:" />
+            <Label Content="当前耗时:" />
             <TextBox x:Name="tb" Width="100" Height="30" VerticalContentAlignment="Center" KeyDown="tb_KeyDown"/>
-            <Label Content="度"/>
+            <Label Content="秒"/>
             <Button Margin="20,0,0,0" x:Name="btnStart" Width="100" Height="26" Content="开始" Click="btnStart_Click"/>
         </StackPanel>
         <Grid Grid.Row="1">
@@ -23,15 +23,21 @@
                 <Path Stroke="#000" StrokeThickness="15" StrokeDashArray="0.3 0.1" StrokeDashCap="Flat">
                     <Path.Data>
                         <GeometryGroup>
-                            <EllipseGeometry x:Name="eg" RadiusX="100" RadiusY="40" Center="100,40"/>
+                            <LineGeometry StartPoint="{Binding TopLineStartPoint}" EndPoint="{Binding TopLineStopPoint}"/>
+                            <LineGeometry StartPoint="{Binding BottomLineStartPoint}" EndPoint="{Binding BottomLineStopPoint}"/>
+                            <PathGeometry>
+                                <PathFigure x:Name="pfLeft" IsClosed="False"/>
+                            </PathGeometry>
+                            <PathGeometry>
+                                <PathFigure x:Name="pfRight" IsClosed="False"/>
+                            </PathGeometry>
                         </GeometryGroup>
                     </Path.Data>
                 </Path>
-                <Path  Stroke="#FFE23838" StrokeThickness="10"  StrokeDashArray="2 1" StrokeDashCap="Round">
+                <Path Stroke="#FFE23838" StrokeThickness="10"  StrokeDashArray="2 1" StrokeDashCap="Round">
                     <Path.Data>
-                        <GeometryGroup>
-                            <PathGeometry x:Name="pg"/>
-                        </GeometryGroup>
+                        <PathGeometry x:Name="pg">
+                        </PathGeometry>
                     </Path.Data>
                 </Path>
             </Canvas>
