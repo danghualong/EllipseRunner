@@ -121,87 +121,71 @@ namespace EllipseRunner
 
         }
 
+        private void AddBottomRightLine(PathFigure figure, double distance)
+        {
+            LineSegment line = new LineSegment();
+            line.Point = new Point(startPoint.X + distance, startPoint.Y);
+            figure.Segments.Add(line);
+        }
+        private void AddRightArc(PathFigure figure, double distance)
+        {
+            double x = BottomLineStopPoint.X + RADIUS * Math.Sin(distance / RADIUS);
+            double y = BottomLineStopPoint.Y - RADIUS + RADIUS * Math.Cos(distance / RADIUS);
+            var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
+            figure.Segments.Add(segment);
+        }
+        private void AddTopLine(PathFigure figure, double distance)
+        {
+            var line = new LineSegment();
+            line.Point = new Point(TopLineStopPoint.X - distance, TopLineStopPoint.Y);
+            figure.Segments.Add(line);
+        }
+        private void AddLeftArc(PathFigure figure, double distance)
+        {
+            var x = TopLineStartPoint.X - RADIUS * Math.Sin(distance / RADIUS);
+            var y = TopLineStartPoint.Y + RADIUS - RADIUS * Math.Cos(distance / RADIUS);
+            var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
+            figure.Segments.Add(segment);
+        }
+        private void AddBottomLeftLine(PathFigure figure, double distance)
+        {
+            var line = new LineSegment();
+            line.Point = new Point(BottomLineStartPoint.X + distance, BottomLineStartPoint.Y);
+            figure.Segments.Add(line);
+        }
         private void AddArcFigure(PathGeometry pg,double distance)
         {
             var figure = new PathFigure();
             figure.StartPoint = startPoint;
             if (distance <= LINE_WIDTH / 2)
             {
-                LineSegment line = new LineSegment();
-                line.Point= new Point(startPoint.X + distance, startPoint.Y);
-                figure.Segments.Add(line);
+                AddBottomRightLine(figure,distance);
             }
             else if (distance <= LINE_WIDTH / 2 + Math.PI * RADIUS)
             {
-                LineSegment line = new LineSegment();
-                line.Point = new Point(BottomLineStopPoint.X, BottomLineStopPoint.Y);
-                figure.Segments.Add(line);
-                double s = distance - LINE_WIDTH / 2;
-                double x = BottomLineStopPoint.X+RADIUS * Math.Sin(s / RADIUS);
-                double y = BottomLineStopPoint.Y - RADIUS + RADIUS * Math.Cos(s / RADIUS);
-                var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
+                AddBottomRightLine(figure, LINE_WIDTH / 2);
+                AddRightArc(figure, distance - LINE_WIDTH / 2);
             }
             else if (distance <= LINE_WIDTH * 3 / 2 + Math.PI * RADIUS)
             {
-                LineSegment line = new LineSegment();
-                line.Point = new Point(BottomLineStopPoint.X, startPoint.Y);
-                figure.Segments.Add(line);
-                double s = Math.PI * RADIUS;
-                double x = RADIUS * Math.Sin(s / RADIUS) + BottomLineStopPoint.X;
-                double y = BottomLineStopPoint.Y - RADIUS + RADIUS * Math.Cos(s / RADIUS);
-                var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
-                s= distance - LINE_WIDTH / 2- Math.PI * RADIUS;
-                line = new LineSegment();
-                line.Point = new Point(TopLineStopPoint.X-s, TopLineStopPoint.Y);
-                figure.Segments.Add(line);
-
+                AddBottomRightLine(figure, LINE_WIDTH / 2);
+                AddRightArc(figure, Math.PI * RADIUS);
+                AddTopLine(figure, distance-LINE_WIDTH / 2- Math.PI * RADIUS);
             }
             else if (distance <= LINE_WIDTH * 3 / 2 + Math.PI * RADIUS * 2)
             {
-                LineSegment line = new LineSegment();
-                line.Point = new Point(BottomLineStopPoint.X, startPoint.Y);
-                figure.Segments.Add(line);
-                double s = Math.PI * RADIUS;
-                double x = RADIUS * Math.Sin(s / RADIUS) + BottomLineStopPoint.X;
-                double y = BottomLineStopPoint.Y - RADIUS+RADIUS * Math.Cos(s / RADIUS);
-                var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
-                s =LINE_WIDTH;
-                line = new LineSegment();
-                line.Point = new Point(TopLineStopPoint.X - s, TopLineStopPoint.Y);
-                figure.Segments.Add(line);
-                s = distance - 3*LINE_WIDTH / 2 - Math.PI * RADIUS;
-                x = TopLineStartPoint.X-RADIUS * Math.Sin(s / RADIUS);
-                y = TopLineStartPoint.Y + RADIUS-RADIUS * Math.Cos(s / RADIUS);
-                segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
+                AddBottomRightLine(figure, LINE_WIDTH / 2);
+                AddRightArc(figure, Math.PI * RADIUS);
+                AddTopLine(figure, LINE_WIDTH);
+                AddLeftArc(figure, distance -LINE_WIDTH * 3 / 2 - Math.PI * RADIUS);
             }
             else
             {
-                LineSegment line = new LineSegment();
-                line.Point = new Point(BottomLineStopPoint.X, startPoint.Y);
-                figure.Segments.Add(line);
-                double s = Math.PI * RADIUS;
-                double x = RADIUS * Math.Sin(s / RADIUS) + BottomLineStopPoint.X;
-                double y = BottomLineStopPoint.Y - RADIUS + RADIUS * Math.Cos(s / RADIUS);
-                var segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
-                s = LINE_WIDTH;
-                line = new LineSegment();
-                line.Point = new Point(TopLineStopPoint.X - s, TopLineStopPoint.Y);
-                figure.Segments.Add(line);
-                s = Math.PI * RADIUS;
-                x = TopLineStartPoint.X - RADIUS * Math.Sin(s / RADIUS);
-                y = TopLineStartPoint.Y + RADIUS - RADIUS * Math.Cos(s / RADIUS);
-                segment = new ArcSegment(new Point(x, y), CIRCLE_SIZE, 0, false, SweepDirection.Counterclockwise, true);
-                figure.Segments.Add(segment);
-
-                s = distance - 3 * LINE_WIDTH / 2 - 2*Math.PI * RADIUS;
-                line = new LineSegment();
-                line.Point = new Point(BottomLineStartPoint.X +s, BottomLineStartPoint.Y);
-                figure.Segments.Add(line);
+                AddBottomRightLine(figure, LINE_WIDTH / 2);
+                AddRightArc(figure, Math.PI * RADIUS);
+                AddTopLine(figure, LINE_WIDTH);
+                AddLeftArc(figure, Math.PI * RADIUS);
+                AddBottomLeftLine(figure, distance - LINE_WIDTH * 3 / 2 - 2*Math.PI * RADIUS);
             }
             pg.Figures.Add(figure);
         }
